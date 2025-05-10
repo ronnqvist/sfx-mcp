@@ -1,0 +1,70 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sfx-mcp"
+version = "0.1.0"
+description = "MCP Server for generating sound effects using the elevenlabs-sfx library."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Cline (AI Agent)", email = "cline@example.com" },
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Sound/Audio :: Sound Synthesis",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+]
+dependencies = [
+    "fastapi>=0.100.0,<1.0.0",
+    "uvicorn[standard]>=0.20.0,<1.0.0",
+    "python-dotenv>=1.0.0,<2.0.0",
+    "mcp[cli]" # Changed from mcp-sdk based on Perplexity install instructions
+]
+
+[project.urls]
+Homepage = "https://github.com/example/sfx-mcp" # Placeholder
+Repository = "https://github.com/example/sfx-mcp" # Placeholder
+
+[tool.hatch.version]
+path = "src/sfx_mcp/__init__.py" # Assuming version will be managed here later
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+    "/tests", # If tests are added later
+    "pyproject.toml",
+    "README.md",
+    "LICENSE",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sfx_mcp"]
+
+[tool.hatch.envs.default]
+post-install-commands = [
+    "python -c \"import sys; sys.stderr.write('--- Attempting to install elevenlabs-sfx editable ---\\n')\"",
+    "pip install -v -e ../elevenlabs-sfx",
+    "python -c \"import sys; sys.stderr.write('--- Finished attempting elevenlabs-sfx install ---\\n')\""
+]
+# Ensure other default env settings like 'skip-install = false' (default) are maintained
+# dev-mode = false (default)
+env-vars = { PYTHONUNBUFFERED = "1", HATCH_PROGRESS_BARS = "0" }
+
+[tool.hatch.envs.default.scripts]
+serve_mcp = "python -u -m sfx_mcp.main"
+# Placeholder for future test scripts if tests are added to sfx-mcp
+# test = "pytest"
+# The old 'start' script for Uvicorn is no longer needed for MCP stdio.
+# If HTTP access is still desired for direct testing, it could be kept or renamed.
+# For now, focusing on MCP stdio functionality.
