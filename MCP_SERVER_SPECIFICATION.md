@@ -19,7 +19,7 @@ The SFX MCP Server is a Python application designed to provide sound effect gene
 -   **MCP SDK**: `mcp-sdk` for Python (specifically `mcp[cli]` package).
 -   **Server Class**: `mcp.server.Server` (via `FastMCP` initially, then refactored to base `Server`).
 -   **Transport**: Stdio, managed by `mcp.server.stdio.stdio_server` context manager.
--   **Core Dependency**: `elevenlabs-sfx` (local Python library, installed editable via Hatch `post-install-commands`).
+-   **Core Dependency**: `sfx_mcp.elevenlabs_sfx` (internal module, formerly the `elevenlabs-sfx` library).
 -   **Configuration**: `python-dotenv` for loading `ELEVENLABS_API_KEY` from `.env`.
 -   **Project Management**: Hatch.
 -   **Directory Structure**:
@@ -39,10 +39,17 @@ The SFX MCP Server is a Python application designed to provide sound effect gene
     │   └── sfx_mcp/
     │       ├── __init__.py
     │       ├── config.py          (loads .env, defines constants)
-    │       ├── elevenlabs_proxy.py (interfaces with elevenlabs-sfx library)
+    │       ├── elevenlabs_proxy.py (interfaces with the internal elevenlabs_sfx module)
+    │       ├── elevenlabs_sfx/    (internal module for ElevenLabs interaction)
+    │       │   ├── __init__.py
+    │       │   ├── client.py
+    │       │   └── exceptions.py
     │       └── main.py            (MCP server logic, tool definitions)
     └── tests/
-        └── __init__.py
+        ├── __init__.py
+        └── elevenlabs_sfx/      (tests for the internal elevenlabs_sfx module)
+            ├── __init__.py
+            └── test_client.py
     ```
 
 ## 3. Server Details
@@ -63,7 +70,7 @@ The SFX MCP Server is a Python application designed to provide sound effect gene
 Key dependencies managed by `pyproject.toml` (Hatch):
 -   `mcp[cli]`: The Model Context Protocol SDK for Python.
 -   `python-dotenv`: For loading the `.env` file.
--   `elevenlabs-sfx`: Local path dependency (`../elevenlabs-sfx`), installed as editable via `post-install-commands`.
+-   `elevenlabs>=1.2.0,<2.0.0`: The official ElevenLabs Python SDK, now a direct dependency for the internal `sfx_mcp.elevenlabs_sfx` module.
 
 ## 6. Tool: `generate_sfx`
 

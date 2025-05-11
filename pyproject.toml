@@ -29,12 +29,20 @@ dependencies = [
     "fastapi>=0.100.0,<1.0.0",
     "uvicorn[standard]>=0.20.0,<1.0.0",
     "python-dotenv>=1.0.0,<2.0.0",
-    "mcp[cli]" # Changed from mcp-sdk based on Perplexity install instructions
+    "mcp[cli]", # Changed from mcp-sdk based on Perplexity install instructions
+    "elevenlabs>=1.2.0,<2.0.0"
 ]
 
 [project.urls]
 Homepage = "https://github.com/example/sfx-mcp" # Placeholder
 Repository = "https://github.com/example/sfx-mcp" # Placeholder
+
+[project.optional-dependencies]
+test = [
+    "pytest>=7.0",
+    "pytest-cov>=3.0",
+    "requests-mock>=1.9.0"
+]
 
 [tool.hatch.version]
 path = "src/sfx_mcp/__init__.py" # Assuming version will be managed here later
@@ -52,19 +60,25 @@ include = [
 packages = ["src/sfx_mcp"]
 
 [tool.hatch.envs.default]
-post-install-commands = [
-    "python -c \"import sys; sys.stderr.write('--- Attempting to install elevenlabs-sfx editable ---\\n')\"",
-    "pip install -v -e ../elevenlabs-sfx",
-    "python -c \"import sys; sys.stderr.write('--- Finished attempting elevenlabs-sfx install ---\\n')\""
-]
 # Ensure other default env settings like 'skip-install = false' (default) are maintained
 # dev-mode = false (default)
+features = ["test"]
 env-vars = { PYTHONUNBUFFERED = "1", HATCH_PROGRESS_BARS = "0" }
 
 [tool.hatch.envs.default.scripts]
 serve_mcp = "python -u -m sfx_mcp.main"
-# Placeholder for future test scripts if tests are added to sfx-mcp
-# test = "pytest"
+test = "pytest"
 # The old 'start' script for Uvicorn is no longer needed for MCP stdio.
 # If HTTP access is still desired for direct testing, it could be kept or renamed.
 # For now, focusing on MCP stdio functionality.
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --cov=src/sfx_mcp --cov-report=term-missing --cache-clear"
+testpaths = [
+    "tests",
+    "tests/elevenlabs_sfx"
+]
+
+[tool.coverage.run]
+source = ["src/sfx_mcp"]

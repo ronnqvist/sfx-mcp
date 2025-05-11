@@ -25,7 +25,7 @@ from mcp.server.stdio import stdio_server
 # Local project imports
 from .config import ELEVENLABS_API_KEY, MCP_TEMP_FILES_DIR
 from .elevenlabs_proxy import get_elevenlabs_sfx_client
-from elevenlabs_sfx import exceptions as sfx_exceptions
+from sfx_mcp.elevenlabs_sfx import exceptions as sfx_exceptions
 
 server = Server(
     name="sfx-mcp",

@@ -1,6 +1,6 @@
 # SFX MCP Server
 
-The SFX MCP Server provides a Model Context Protocol (MCP) tool for generating sound effects using the ElevenLabs API. It leverages the `elevenlabs-sfx` Python library as its core engine for sound generation and is designed to be managed by an MCP client like Cline.
+The SFX MCP Server provides a Model Context Protocol (MCP) tool for generating sound effects using the ElevenLabs API. It uses an internal module (`sfx_mcp.elevenlabs_sfx`) as its core engine for sound generation and is designed to be managed by an MCP client like Cline.
 
 ## Prerequisites
 
@@ -12,24 +12,15 @@ The SFX MCP Server provides a Model Context Protocol (MCP) tool for generating s
 
 This server is intended to be run as an MCP server, typically managed by an MCP client application (e.g., Cline).
 
-1.  **Clone Repositories:**
-    This server depends on the local `elevenlabs-sfx` library. Ensure that the `elevenlabs-sfx` project directory is present as a sibling to the `sfx-mcp` project root.
-    ```bash
-    # In your main projects directory:
-    # git clone <repository_url_for_elevenlabs-sfx> # If not already present
-    # git clone <repository_url_for_sfx-mcp>       # If not already present
-    # cd sfx-mcp
-    ```
-
-2.  **Configure API Key:**
+1.  **Configure API Key:**
     Create a `.env` file in the root of the `sfx-mcp` project directory (i.e., `sfx-mcp/.env`):
     ```env
     ELEVENLABS_API_KEY="your_actual_elevenlabs_api_key"
     ```
     Replace `"your_actual_elevenlabs_api_key"` with your valid ElevenLabs API key. The server will not function without it.
 
-3.  **Hatch Environment Setup (Automatic via MCP Client):**
-    When an MCP client like Cline starts this server using the configuration below, Hatch will automatically create a virtual environment, install dependencies (including `mcp[cli]` and the local `elevenlabs-sfx` library), and run the server script.
+2.  **Hatch Environment Setup (Automatic via MCP Client):**
+    When an MCP client like Cline starts this server using the configuration below, Hatch will automatically create a virtual environment, install dependencies (including `mcp[cli]` and the internal `elevenlabs_sfx` module components), and run the server script.
     You do not typically need to run `hatch env create` or `hatch run` manually for Cline integration, but doing so can be useful for direct testing:
     ```bash
     # To manually test the server startup (from sfx-mcp directory):

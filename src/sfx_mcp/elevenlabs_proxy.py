@@ -1,5 +1,5 @@
-from elevenlabs_sfx.client import ElevenLabsSFXClient
-from elevenlabs_sfx import exceptions as sfx_exceptions
+from sfx_mcp.elevenlabs_sfx.client import ElevenLabsSFXClient
+from sfx_mcp.elevenlabs_sfx import exceptions as sfx_exceptions
 from .config import ELEVENLABS_API_KEY
 
 # Store the client instance globally within this module to reuse it if possible,
